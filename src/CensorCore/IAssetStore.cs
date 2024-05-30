@@ -36,7 +36,12 @@ namespace CensorCore {
 
         public Task<IEnumerable<RawImageData>> GetImages(string imageType, List<string>? category) {
             var allFiles = Directory.EnumerateFiles(this._imageRoot, "*", SearchOption.AllDirectories).ToList();
-            var allImages = allFiles.Select<string, (string FilePath, IImageInfo Image, IImageFormat Format)>(fi => (FilePath: fi, Image: Image.Identify(fi, out var format), Format: format));
+            var allImages = allFiles.Select<string, (string FilePath, ImageInfo Image, IImageFormat Format)>(fi =>
+            {
+                var info = Image.Identify(fi);
+                var format = Image.DetectFormat(fi);
+                return (FilePath: fi, Image: info, Format: format);
+            });
             var ratioImages = allImages.Where(i =>
             {
                 return true;
@@ -53,7 +58,13 @@ namespace CensorCore {
         public async Task<RawImageData?> GetRandomImage(string imageType, float? ratio, List<string>? category)
         {
             var allFiles = Directory.EnumerateFiles(this._imageRoot, "*", SearchOption.AllDirectories).ToList();
-            var allImages = allFiles.Select<string, (string FilePath, IImageInfo Image, IImageFormat Format)>(fi => (FilePath: fi, Image: Image.Identify(fi, out var format), Format: format));
+            var allImages =
+                allFiles.Select<string, (string FilePath, ImageInfo Image, IImageFormat Format)>(fi => 
+                {
+                    var info = Image.Identify(fi);
+                    var format = Image.DetectFormat(fi);
+                    return (FilePath: fi, Image: info, Format: format);
+                });
             var ratioImages = allImages.Where(i =>
             {
                 var iRatio = i.Image.Width / i.Image.Height;

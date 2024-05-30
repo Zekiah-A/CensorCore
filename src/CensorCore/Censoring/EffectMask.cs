@@ -63,7 +63,7 @@ namespace CensorCore.Censoring
             if (ratio < 0.8 || ratio > 1.2) {
             // if (ratio > 0) {
                 var grads = GetOverlapGradients(mask, stops);
-                mask.Mutate(x => {
+                mask.Mutate<Rgba32>(x => {
                     foreach (var grad in grads)
                     {
                         x.Fill(grad);
@@ -79,9 +79,9 @@ namespace CensorCore.Censoring
             return mask;
         }
 
-        private List<IBrush> GetSquareGradients(Image<Rgba32> mask, ColorStop[] stops) {
+        private List<Brush> GetSquareGradients(Image<Rgba32> mask, ColorStop[] stops) {
             var top = new LinearGradientBrush(mask.GetCenter(), new PointF(mask.Width/2, 0), GradientRepetitionMode.DontFill, stops);
-            return new List<IBrush> {top};
+            return new List<Brush> {top};
             // var left = new LinearGradientBrush(mask.GetCenter(), new PointF(0, mask.Height/2), GradientRepetitionMode.DontFill, stops);
             // var bottom = new LinearGradientBrush(mask.GetCenter(), new PointF(mask.Width/2, mask.Height), GradientRepetitionMode.DontFill, stops);
             // var right = new LinearGradientBrush(mask.GetCenter(), new PointF(mask.Width, mask.Height/2), GradientRepetitionMode.DontFill, stops);
@@ -89,7 +89,7 @@ namespace CensorCore.Censoring
 
         }
 
-        private List<IBrush> GetOverlapGradients(Image<Rgba32> mask, ColorStop[] stops) {
+        private List<Brush> GetOverlapGradients(Image<Rgba32> mask, ColorStop[] stops) {
             var topCenter = new PointF(mask.Width/2, (mask.Height/4));
             var topEnd = new PointF(mask.Width, topCenter.Y);
             var topRatio = (topEnd.X-topCenter.X)/(mask.Height/4F);
@@ -115,7 +115,7 @@ namespace CensorCore.Censoring
             var cRatio = (cEnd.X-cCenter.X)/(mask.Height/2F);
             var center = new EllipticGradientBrush(cCenter, cEnd, 1/cRatio, GradientRepetitionMode.DontFill, stops);
 
-            return new List<IBrush> {top, left, bottom, right, center};
+            return new List<Brush> {top, left, bottom, right, center};
             // var left = new LinearGradientBrush(mask.GetCenter(), new PointF(0, mask.Height/2), GradientRepetitionMode.DontFill, stops);
             // var bottom = new LinearGradientBrush(mask.GetCenter(), new PointF(mask.Width/2, mask.Height), GradientRepetitionMode.DontFill, stops);
             // var right = new LinearGradientBrush(mask.GetCenter(), new PointF(mask.Width, mask.Height/2), GradientRepetitionMode.DontFill, stops);

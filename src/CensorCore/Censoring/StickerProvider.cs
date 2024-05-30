@@ -96,7 +96,8 @@ namespace CensorCore.Censoring
                 for (int i = 0; i < resultCount / 1.25 && validImage == null; i++)
                 {
                     var candidate = allFiles.Random(resultCount);
-                    var img = Image.Identify(candidate.RawData, out var format);
+                    var img = Image.Identify(candidate.RawData);
+                    var format = Image.DetectFormat(candidate.RawData);
                     var iRatio = img.Width / img.Height;
                     if (boxRatio == null || CloseEnough(iRatio, boxRatio.Value)) {
                         validImage = new RawImageData(candidate.RawData, format.DefaultMimeType);

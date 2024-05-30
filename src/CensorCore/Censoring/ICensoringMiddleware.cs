@@ -26,15 +26,15 @@ public class GifWatermarkMiddleware : ICensoringMiddleware {
                 var fontSize = (result.ImageData.SourceImage.Width/10F);
                 var font = _fonts.Families.First().CreateFont(fontSize, FontStyle.Bold);
                 var origin = new Point(Math.Min(5, result.ImageData.SourceImage.Width), Math.Min(5, result.ImageData.SourceImage.Height));
-                TextOptions options = new(font) {
+                RichTextOptions options = new(font) {
                     Origin = origin, // Set the rendering origin.
                     WrappingLength = 0, // Greater than zero so we will word wrap at 100 pixels wide
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top,
                     Font = font
                 };
-                IBrush brush = Brushes.Solid(Color.Black);
-                IPen pen = Pens.Solid(Color.White, fontSize/16F);
+                Brush brush = Brushes.Solid(Color.Black);
+                Pen pen = Pens.Solid(Color.White, fontSize/16F);
                 addLateMutation(10, x => x.DrawText(options, "GIF", brush, pen));
         }
         return Task.FromResult<IEnumerable<Classification>?>(null);

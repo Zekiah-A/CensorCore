@@ -41,7 +41,7 @@ namespace CensorCore.Censoring {
                 var fontSize = (result.Box.Width/4F)*(levelDiff.GetScaleFactor(10F));
                 var font = _fonts.Families.First().CreateFont(fontSize, FontStyle.Bold);
                 // The options are optional
-                TextOptions options = new(font) {
+                RichTextOptions options = new(font) {
                     Origin = cropRect.GetCenter(), // Set the rendering origin.
                     TabWidth = 4, // A tab renders as 8 spaces wide
                     WrappingLength = opts.WrapText ? result.Box.Width : 0, // Greater than zero so we will word wrap at 100 pixels wide
@@ -49,8 +49,9 @@ namespace CensorCore.Censoring {
                     VerticalAlignment = VerticalAlignment.Center,
                     TextAlignment = TextAlignment.Center
                 };
-                IBrush brush = Brushes.Solid(Color.White);
-                IPen pen = Pens.Solid(Color.Black, (result.Box.Width/80F)*(level.GetScaleFactor(10F)));
+                
+                Brush brush = Brushes.Solid(Color.White);
+                Pen pen = Pens.Solid(Color.Black, (result.Box.Width/80F)*(level.GetScaleFactor(10F)));
                 if (result.SourceAngle.HasValue) {
                     var drawOpts = new DrawingOptions() { Transform = Matrix3x2Extensions.CreateRotationDegrees(result.SourceAngle.Value, result.Box.GetCenter())};
                     mutations.Add(x => x.DrawText(drawOpts, options, caption.ToUpper(), brush, pen));

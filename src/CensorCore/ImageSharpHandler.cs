@@ -1,6 +1,7 @@
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
@@ -43,17 +44,19 @@ namespace CensorCore
                     throw new Exception("Invalid base64 data URI!", e);
                 }
             }
+            if (File.Exists(path))
+            {
+                return await LoadImageData(await File.ReadAllBytesAsync(path));
+            }
             if (Uri.TryCreate(path, UriKind.RelativeOrAbsolute, out var uri))
             {
                 var contents = uri.IsFile
-                    ? await System.IO.File.ReadAllBytesAsync(System.Web.HttpUtility.UrlDecode(uri.AbsolutePath))
+                    ? await File.ReadAllBytesAsync(System.Web.HttpUtility.UrlDecode(uri.AbsolutePath))
                     : await DownloadFile(uri);
                 return await LoadImageData(contents);
-            } else
-            {
-                throw new Exception("Could not parse image URL!");
             }
-            
+
+            throw new Exception("Could not parse image URL!");
         }
 
         private Image<Rgba32> ResizeImage(Image<Rgba32> image) {
@@ -130,7 +133,8 @@ namespace CensorCore
         }
 
         public Task<ImageData> LoadImageData(byte[] contents) {
-            var img = Image.Load<Rgba32>(contents, out var format);
+            var img = Image.Load<Rgba32>(contents);
+            var format = Image.DetectFormat(contents);
             var frameCount = img.Frames.Count;
             for (int i = 1; i < frameCount; i++)
             {
