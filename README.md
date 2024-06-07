@@ -10,7 +10,7 @@ To be honest, this project was just borne out of having a few different ideas of
 
 ### Build
 
-If you're feeling adventurous and want to build this for yourself, make sure you have the .NET 6 SDK installed and ready, then just run the following:
+If you're feeling adventurous and want to build this for yourself, make sure you have the .NET 8 SDK installed and ready, then just run the following:
 
 ```bash
 dotnet tool restore
