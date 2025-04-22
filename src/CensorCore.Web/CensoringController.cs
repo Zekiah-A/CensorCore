@@ -19,8 +19,10 @@ public class CensoringController : ControllerBase
 
     [HttpGet("info")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult GetInfo([FromServices]IImageHandler imageHandler, [FromServices]IEnumerable<CensorCore.Censoring.ICensorTypeProvider> types, [FromServices]GlobalCensorOptions? options = null) {
-        return Ok(new {
+    public IActionResult GetInfo([FromServices] IImageHandler imageHandler, [FromServices] IEnumerable<CensorCore.Censoring.ICensorTypeProvider> types, [FromServices] GlobalCensorOptions? options = null)
+    {
+        return Ok(new
+        {
             version = CoreManager.GetCoreVersion(),
             imageHandler = imageHandler.GetType().Name,
             provider = _censor.GetType().Name,
@@ -35,24 +37,33 @@ public class CensoringController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<ActionResult<CensoredImage>> CensorImage([FromBody]CensorImageRequestBody requestBody, [FromQuery] bool returnEncoded = false) {
+    public async Task<ActionResult<CensoredImage>> CensorImage([FromBody] CensorImageRequestBody requestBody, [FromQuery] bool returnEncoded = false)
+    {
         var imageUrl = requestBody.ImageDataUrl ?? requestBody.ImageUrl;
-        if (!string.IsNullOrWhiteSpace(imageUrl)) {
+        if (!string.IsNullOrWhiteSpace(imageUrl))
+        {
             var result = await this._ai.RunModel(imageUrl);
             IResultParser? parser = null;
-            if (result != null) {
-                if (requestBody.CensorOptions != null && requestBody.CensorOptions.Any()) {
+            if (result != null)
+            {
+                if (requestBody.CensorOptions != null && requestBody.CensorOptions.Any())
+                {
                     parser = new StaticResultsParser(requestBody.CensorOptions);
                 }
                 var censored = await this._censor.CensorImage(result, parser);
-                if (returnEncoded) {
-                    return Ok(new { imageUrl = censored.ImageDataUrl, imageType = censored.MimeType});
+                if (returnEncoded)
+                {
+                    return Ok(new { imageUrl = censored.ImageDataUrl, imageType = censored.MimeType });
                 }
                 return File(censored.ImageContents, censored.MimeType);
-            } else {
+            }
+            else
+            {
                 return UnprocessableEntity();
             }
-        } else {
+        }
+        else
+        {
             return BadRequest();
         }
     }
@@ -61,11 +72,15 @@ public class CensoringController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<IActionResult> GetCensoredImage([FromQuery] string url) {
-        if (!string.IsNullOrWhiteSpace(url)) {
+    public async Task<IActionResult> GetCensoredImage([FromQuery] string url)
+    {
+        if (!string.IsNullOrWhiteSpace(url))
+        {
             var result = await this._ai.RunModel(url);
-            if (result != null) {
-                var defaults = new Dictionary<string, ImageCensorOptions> {
+            if (result != null)
+            {
+                var defaults = new Dictionary<string, ImageCensorOptions>
+                {
                     ["EXPOSED_BREAST_F"] = new ImageCensorOptions("pixelate") { Level = 10 },
                     ["FACE_F"] = new ImageCensorOptions("blur") { Level = 10 },
                     ["EXPOSED_GENITALIA_F"] = new ImageCensorOptions("blackbars") { Level = 15 },
@@ -73,10 +88,14 @@ public class CensoringController : ControllerBase
                 };
                 var censored = await this._censor.CensorImage(result, new StaticResultsParser(defaults));
                 return File(censored.ImageContents, censored.MimeType);
-            } else {
+            }
+            else
+            {
                 return UnprocessableEntity();
             }
-        } else {
+        }
+        else
+        {
             return BadRequest();
         }
     }

@@ -5,7 +5,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   </PropertyGroup>
 
@@ -17,7 +17,7 @@
   <ItemGroup>
     <PackageReference Condition="'$(RuntimeIdentifier)' == 'win-x64'" Include="Microsoft.ML.OnnxRuntime.DirectML" Version="1.18.0" />
     <PackageReference Condition="'$(RuntimeIdentifier)' == 'linux-x64'" Include="Microsoft.ML.OnnxRuntime.Gpu" Version="1.18.0" />
-    <PackageReference Condition="'$(RuntimeIdentifier)' != 'win-x64' And '$(RuntimeIdentifier)' != 'linux-x64'" Include="Microsoft.ML.OnnxRuntime" Version="1.18.0" />
+    <PackageReference Condition="'$(RuntimeIdentifier)' != 'win-x64' And '$(RuntimeIdentifier)' != 'linux-x64'" Include="Microsoft.ML.OnnxRuntime" Version="1.21.0" />
   </ItemGroup>
 
 </Project>

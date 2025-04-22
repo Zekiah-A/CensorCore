@@ -2,7 +2,8 @@
 using Spectre.Console.Cli;
 
 var app = new CommandApp();
-app.Configure(c => {
+app.Configure(c =>
+{
     c.PropagateExceptions();
     c.AddCommand<CensorCommand>("censor-image");
 });

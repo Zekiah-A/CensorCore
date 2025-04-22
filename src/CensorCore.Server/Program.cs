@@ -19,17 +19,20 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<IImageHandler>(p => new ImageSharpHandler());
-builder.Services.AddSingleton<ModelLoader>(p => {
+builder.Services.AddSingleton<ModelLoader>(p =>
+{
     return new ModelLoaderBuilder()
         .AddDefaultPaths()
         // .AddSearchPath(config)
         .SearchAssembly(System.Reflection.Assembly.GetEntryAssembly())
         .Build();
 });
-builder.Services.AddSingleton<AIService>(p => {
+builder.Services.AddSingleton<AIService>(p =>
+{
     // var loader = p.GetRequiredService<ModelLoader>();
     // var model = await loader.GetModel();
-    if (model == null) {
+    if (model == null)
+    {
         throw new InvalidOperationException("Could not load model from any available source!");
     }
     return CensorCore.Runtime.AIRuntime.CreateService(model, p.GetRequiredService<IImageHandler>());

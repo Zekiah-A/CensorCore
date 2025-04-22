@@ -2,47 +2,46 @@
 
 using Microsoft.ML.OnnxRuntime.Tensors;
 
-namespace CensorCore
+namespace CensorCore;
+
+/// <summary>
+/// A simple utility type for the inputs required for classification.
+/// </summary>
+public class InputImage
 {
     /// <summary>
-    /// A simple utility type for the inputs required for classification.
+    /// The image data correctly formatted as a Tensor for model input.
     /// </summary>
-    public class InputImage
+    /// <value>The image data in Tensor form.</value>
+    /// <remarks>Any pixel/array/value manipulation should have been completed before now</remarks>
+    internal Tensor<float> Tensor { get; set; }
+
+    public InputImage(Tensor<float> tensor, ImageData image)
     {
-        /// <summary>
-        /// The image data correctly formatted as a Tensor for model input.
-        /// </summary>
-        /// <value>The image data in Tensor form.</value>
-        /// <remarks>Any pixel/array/value manipulation should have been completed before now</remarks>
-        internal Tensor<float> Tensor { get; set; }
-
-        public InputImage(Tensor<float> tensor, ImageData image)
-        {
-            Tensor = tensor;
-            Image = image;
-        }
-
-        ImageData Image { get; set; }
+        Tensor = tensor;
+        Image = image;
     }
 
+    ImageData Image { get; set; }
+}
+
+/// <summary>
+/// A simple utility type for the inputs required for classification.
+/// </summary>
+public class InputImage<T>
+{
     /// <summary>
-    /// A simple utility type for the inputs required for classification.
+    /// The image data correctly formatted as a Tensor for model input.
     /// </summary>
-    public class InputImage<T>
+    /// <value>The image data in Tensor form.</value>
+    /// <remarks>Any pixel/array/value manipulation should have been completed before now</remarks>
+    internal Tensor<T> Tensor { get; set; }
+
+    public InputImage(Tensor<T> tensor, ImageData image)
     {
-        /// <summary>
-        /// The image data correctly formatted as a Tensor for model input.
-        /// </summary>
-        /// <value>The image data in Tensor form.</value>
-        /// <remarks>Any pixel/array/value manipulation should have been completed before now</remarks>
-        internal Tensor<T> Tensor { get; set; }
-
-        public InputImage(Tensor<T> tensor, ImageData image)
-        {
-            Tensor = tensor;
-            Image = image;
-        }
-
-        internal ImageData Image { get; set; }
+        Tensor = tensor;
+        Image = image;
     }
+
+    internal ImageData Image { get; set; }
 }

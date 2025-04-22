@@ -2,17 +2,17 @@
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace CensorCore
+namespace CensorCore;
+
+public class ImageData
 {
-    public class ImageData {
-        public ImageData(Image<Rgba32> srcImage)
-        {
-            SourceImage = srcImage;
-        }
-        public Image<Rgba32> SourceImage { get; internal set; }
-        internal Image<Rgba32>? SampledImage {get;set;}
-        internal IImageFormat? Format {get;set;}
-        public SizeF ScaleFactor {get;set;} = new SizeF(1,1);
-        internal Point SampleOffset {get;set;} = new Point(0,0);
+    public ImageData(Image<Rgba32> srcImage)
+    {
+        SourceImage = srcImage;
     }
+    public Image<Rgba32> SourceImage { get; internal set; }
+    internal Image<Rgba32>? SampledImage { get; set; }
+    internal IImageFormat? Format { get; set; }
+    public SizeF ScaleFactor { get; set; } = new SizeF(1, 1);
+    internal Point SampleOffset { get; set; } = new Point(0, 0);
 }

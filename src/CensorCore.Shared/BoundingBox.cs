@@ -6,8 +6,8 @@ public class BoundingBox
     {
         this.X = x;
         this.Y = y;
-        this.Width = (int)Math.Ceiling(endX-x);
-        this.Height = (int)Math.Ceiling(endY-y);
+        this.Width = (int)Math.Ceiling(endX - x);
+        this.Height = (int)Math.Ceiling(endY - y);
     }
 
     public float X { get; set; }
@@ -15,7 +15,8 @@ public class BoundingBox
     public int Height { get; set; }
     public int Width { get; set; }
 
-    public string ToSize() {
+    public string ToSize()
+    {
         return $"{Width}x{Height}";
     }
 }
